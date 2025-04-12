@@ -37,9 +37,12 @@ use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
  */
 trait SiteBasedTestTrait
 {
+    /**
+     * @param string[] $items
+     */
     protected static function failIfArrayIsNotEmpty(array $items): void
     {
-        if (empty($items)) {
+        if ($items === []) {
             return;
         }
 
@@ -49,6 +52,13 @@ trait SiteBasedTestTrait
         );
     }
 
+    /**
+     * @param non-empty-string $identifier
+     * @param array<string, mixed> $site
+     * @param list<array<string, mixed>> $languages
+     * @param array<string, mixed> $errorHandling
+     * @param array<string, mixed> $additional
+     */
     protected function writeSiteConfiguration(
         string $identifier,
         array $site = [],
@@ -76,9 +86,13 @@ trait SiteBasedTestTrait
         }
     }
 
+    /**
+     * @param non-empty-string $identifier
+     * @param array<string, mixed> $overrides
+     */
     protected function mergeSiteConfiguration(
         string $identifier,
-        array $overrides
+        array $overrides,
     ): void {
         $siteConfiguration = $this->get(SiteConfiguration::class);
         $configuration = $siteConfiguration->load($identifier);
@@ -90,19 +104,32 @@ trait SiteBasedTestTrait
         }
     }
 
+    /**
+     * @param array<non-empty-string, mixed> $additionalRootConfiguration
+     * @return array<non-empty-string, mixed>
+     */
     protected function buildSiteConfiguration(
         int $rootPageId,
-        string $base = ''
+        string $base = '',
+        array $additionalRootConfiguration = [],
     ): array {
-        return [
-            'rootPageId' => $rootPageId,
-            'base' => $base,
-        ];
+        return array_merge(
+            [
+                'rootPageId' => $rootPageId,
+                'base' => $base,
+            ],
+            $additionalRootConfiguration,
+        );
     }
 
+    /**
+     * @param non-empty-string $identifier
+     * @param non-empty-string $base
+     * @return array<string, mixed>
+     */
     protected function buildDefaultLanguageConfiguration(
         string $identifier,
-        string $base
+        string $base,
     ): array {
         $configuration = $this->buildLanguageConfiguration($identifier, $base);
         $configuration['flag'] = 'global';
@@ -110,11 +137,18 @@ trait SiteBasedTestTrait
         return $configuration;
     }
 
+    /**
+     * @param non-empty-string $identifier
+     * @param non-empty-string $base
+     * @param non-empty-string[] $fallbackIdentifiers
+     * @param non-empty-string|null $fallbackType
+     * @return array<string, mixed>
+     */
     protected function buildLanguageConfiguration(
         string $identifier,
         string $base,
         array $fallbackIdentifiers = [],
-        ?string $fallbackType = null
+        ?string $fallbackType = null,
     ): array {
         $preset = $this->resolveLanguagePreset($identifier);
 
@@ -155,9 +189,14 @@ trait SiteBasedTestTrait
         return $configuration;
     }
 
+    /**
+     * @param non-empty-string $handler
+     * @param int[] $codes
+     * @return array<non-empty-string, mixed>
+     */
     protected function buildErrorHandlingConfiguration(
         string $handler,
-        array $codes
+        array $codes,
     ): array {
         if ($handler === 'Page') {
             // This implies you cannot test both 404 and 403 in the same test.
@@ -202,9 +241,10 @@ trait SiteBasedTestTrait
     }
 
     /**
-     * @return mixed
+     * @param non-empty-string $identifier
+     * @return array<non-empty-string, mixed>
      */
-    protected function resolveLanguagePreset(string $identifier)
+    protected function resolveLanguagePreset(string $identifier): array
     {
         if (!isset(static::LANGUAGE_PRESETS[$identifier])) {
             throw new \LogicException(
@@ -216,6 +256,10 @@ trait SiteBasedTestTrait
     }
 
     /**
+     * @param InternalRequest $request
+     * @param InstructionInterface ...$instructions
+     * @return InternalRequest
+     *
      * @todo Instruction handling should be part of Testing Framework (multiple instructions per identifier, merge in interface)
      */
     protected function applyInstructions(InternalRequest $request, InstructionInterface ...$instructions): InternalRequest
@@ -224,11 +268,9 @@ trait SiteBasedTestTrait
 
         foreach ($instructions as $instruction) {
             $identifier = $instruction->getIdentifier();
-            if (isset($modifiedInstructions[$identifier]) || $request->getInstruction($identifier) !== null) {
-                $modifiedInstructions[$identifier] = $this->mergeInstruction(
-                    $modifiedInstructions[$identifier] ?? $request->getInstruction($identifier),
-                    $instruction
-                );
+            $useModifier = $modifiedInstructions[$identifier] ?? $request->getInstruction($identifier);
+            if ($useModifier !== null) {
+                $modifiedInstructions[$identifier] = $this->mergeInstruction($useModifier, $instruction);
             } else {
                 $modifiedInstructions[$identifier] = $instruction;
             }
@@ -239,7 +281,7 @@ trait SiteBasedTestTrait
 
     protected function mergeInstruction(InstructionInterface $current, InstructionInterface $other): InstructionInterface
     {
-        if (get_class($current) !== get_class($other)) {
+        if ($current::class !== $other::class) {
             throw new \LogicException('Cannot merge different instruction types', 1565863174);
         }
 
