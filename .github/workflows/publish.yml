@@ -39,3 +39,4 @@ jobs:
           files: |
             LICENSE
           fail_on_unmatched_files: true
+          make_latest: false
