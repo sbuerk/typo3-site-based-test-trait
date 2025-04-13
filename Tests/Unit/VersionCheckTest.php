@@ -23,7 +23,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class VersionCheckTest extends UnitTestCase
 {
-    private const SUPPORTED_TYPO3_MAJOR_VERSION = 13;
+    private const SUPPORTED_TYPO3_MAJOR_VERSION = 14;
 
     #[Test]
     public function ensureSupportedTypo3Version(): void
