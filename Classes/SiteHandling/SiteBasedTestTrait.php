@@ -19,6 +19,7 @@ namespace SBUERK\TYPO3\Testing\SiteHandling;
 
 use SBUERK\TYPO3\Testing\Frontend\PhpError;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
+use TYPO3\CMS\Core\Configuration\SiteWriter;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\ArrayValueInstruction;
@@ -76,11 +77,11 @@ trait SiteBasedTestTrait
         if ($additional !== []) {
             ArrayUtility::mergeRecursiveWithOverrule($configuration, $site);
         }
-        $siteConfiguration = $this->get(SiteConfiguration::class);
+        $siteWriter = $this->get(SiteWriter::class);
         try {
             // ensure no previous site configuration influences the test
             GeneralUtility::rmdir($this->instancePath . '/typo3conf/sites/' . $identifier, true);
-            $siteConfiguration->write($identifier, $configuration);
+            $siteWriter->write($identifier, $configuration);
         } catch (\Exception $exception) {
             $this->fail($exception->getMessage());
         }
@@ -95,10 +96,11 @@ trait SiteBasedTestTrait
         array $overrides,
     ): void {
         $siteConfiguration = $this->get(SiteConfiguration::class);
+        $siteWriter = $this->get(SiteWriter::class);
         $configuration = $siteConfiguration->load($identifier);
         ArrayUtility::mergeRecursiveWithOverrule($configuration, $overrides);
         try {
-            $siteConfiguration->write($identifier, $configuration);
+            $siteWriter->write($identifier, $configuration);
         } catch (\Exception $exception) {
             $this->fail($exception->getMessage());
         }
@@ -156,6 +158,7 @@ trait SiteBasedTestTrait
             'languageId' => $preset['id'],
             'title' => $preset['title'],
             'navigationTitle' => $preset['title'],
+            'websiteTitle' => $preset['websiteTitle'] ?? '',
             'base' => $base,
             'locale' => $preset['locale'],
             'flag' => $preset['iso'] ?? '',

@@ -286,7 +286,7 @@ fi
 
 # Option defaults
 TEST_SUITE="unit"
-CORE_VERSION="12"
+CORE_VERSION="13"
 DBMS="sqlite"
 PHP_VERSION="8.2"
 PHP_XDEBUG_ON=0
