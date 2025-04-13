@@ -92,6 +92,29 @@ $this->writeSiteConfiguration(
 );
 ```
 
+> [!IMPORTANT]
+> TYPO3 v13 introduced `array $dependency` as 4th argument, which is
+> removed in this implementation in favour of the more generic custom
+> `array $additional` to keep same signature across package versions.
+
+To add `SiteSets` dependency add it as part of the `$additional` array instead of 
+the not adopted `array $dependencies` in TYPO3 v13:
+
+```php
+$this->writeSiteConfiguration(
+    identifier: 'acme',
+    site: [], // $this->buildSiteConfiguration(...)
+    languages: [], // [$this->buildDefaultLanguageConfiguration(...), $this->buildLanguageConfiguration(...), ...]
+    errorHandling: [], // $this->buildErrorHandlingConfiguration(...)
+    // additional content
+    additional: [
+      'dependencies' => [
+        'my-vendor/site-set-identifier',
+      ],
+    ],
+);
+```
+
 ### `buildSiteConfiguration()`
 
 This method got a additional argument `$additionalRootConfiguration`, which also allows to add custom things on root
