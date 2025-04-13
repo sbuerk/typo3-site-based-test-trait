@@ -2,11 +2,12 @@
 
 ## Compatibility
 
-| branch | version   | TYPO3           | testing-framework |
-|--------|-----------|-----------------|-------------------|
-| main   | 3.x.x-dev | main,14.0.0-dev | main, 9           |
-| 2      | 2.x.x-dev | 13.4,13.4.x-dev | 9                 |
-| 1      | 1.x.x-dev | 12.4,12.4.x-dev | 8                 |
+
+| branch | version   | TYPO3           | testing-framework | PHP                | CI State                                                                                                                                                                                   |
+|--------|-----------|-----------------|-------------------|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| main   | 3.x.x-dev | main,14.0.0-dev | main, 9           | 8.2, 8.3, 8.4      | [![CI](https://github.com/sbuerk/typo3-site-based-test-trait/actions/workflows/ci.yml/badge.svg)](https://github.com/sbuerk/typo3-site-based-test-trait/actions/workflows/ci.yml)          |
+| 2      | 2.x.x-dev | 13.4,13.4.x-dev | 8,9               | 8.2, 8.3, 8.4      | [![CI](https://github.com/sbuerk/typo3-site-based-test-trait/actions/workflows/ci.yml/badge.svg?branch=2)](https://github.com/sbuerk/typo3-site-based-test-trait/actions/workflows/ci.yml) |
+| 1      | 1.x.x-dev | 12.4,12.4.x-dev | 8                 | 8.1, 8.2, 8.3, 8.4 | [![CI](https://github.com/sbuerk/typo3-site-based-test-trait/actions/workflows/ci.yml/badge.svg?branch=1)](https://github.com/sbuerk/typo3-site-based-test-trait/actions/workflows/ci.yml) |
 
 ## Description
 
