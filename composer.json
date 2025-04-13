@@ -29,9 +29,6 @@
             "app-dir": ".Build",
             "extension-key": "sbuerk_testing",
             "web-dir": ".Build/Web"
-        },
-        "branch-alias": {
-            "dev-main": "2.x-dev"
         }
     },
     "require": {
