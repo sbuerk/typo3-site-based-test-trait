@@ -1,0 +1,27 @@
+name: cron
+
+on:
+  schedule:
+    - cron: '42 5 * * *'
+  workflow_dispatch:
+
+jobs:
+  nightly:
+    name: "dispatch nightly"
+    runs-on: ubuntu-22.04
+    permissions: write-all
+    strategy:
+      fail-fast: false
+      matrix:
+        releaseBranch: [ "main", "1" ]
+    steps:
+      - name: "Checkout '${{ matrix.releaseBranch }}'"
+        uses: actions/checkout@v4
+        with:
+          ref: '${{ matrix.releaseBranch }}'
+
+      - name: "Execute 'ci.yml' on branch '${{ matrix.releaseBranch }}'"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run ci.yml --ref ${{ matrix.releaseBranch }}
