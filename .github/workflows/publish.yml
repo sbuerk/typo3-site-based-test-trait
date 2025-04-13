@@ -28,23 +28,6 @@ jobs:
         id: get-version
         run: echo "version=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
-      - name: Get comment
-        id: get-comment
-        run: |
-          readonly local releaseCommentPrependBody="$( git tag -l ${{ env.version }} --format '%(contents)' )"
-          if (( $(grep -c . <<<"${releaseCommentPrependBody// }") > 1 )); then
-            {
-              echo 'releaseCommentPrependBody<<EOF'
-              echo "$releaseCommentPrependBody"
-              echo EOF
-            } >> "$GITHUB_ENV"
-          fi
-          {
-            echo 'terReleaseNotes<<EOF'
-            echo "https://github.com/${{ github.repository }}/releases/tag/${{ env.version }}"
-            echo EOF
-          } >> "$GITHUB_ENV"
-
       # Note that when release already exists for tag, only files will be uploaded and lets this acting as a
       # fallback to ensure that a real GitHub release is created for the tag along with extension artifacts.
       - name: Create release and upload artifacts in the same step
@@ -52,8 +35,8 @@ jobs:
         if: ${{startsWith(github.ref, 'refs/tags/') }}
         with:
           name: "[RELEASE] ${{ env.version }}"
-          body: "${{ env.releaseCommentPrependBody }}"
           generate_release_notes: true
           files: |
             LICENSE
           fail_on_unmatched_files: true
+          make_latest: false
