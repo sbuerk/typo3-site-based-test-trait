@@ -200,3 +200,24 @@ $this->setUpFrontendRootPage(
     false,
 );
 ```
+
+## Create a release (maintainer only)
+
+Prerequisites:
+
+* git binary
+* ssh key allowed to push new branches to the repository
+
+Checkout the release branch and 
+
+```shell
+TAG_BRANCH="main" \
+&& TAG_VERSION="1.2.3" \
+&& git fetch --all \
+&& git checkout ${TAG_BRANCH} \
+&& git pull --rebase \
+&& git tag "${TAG_VERSION}" \
+&& git push --tags
+```
+
+No need to create GitHub release manually - the publish workflow takes care of this.
