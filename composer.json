@@ -31,7 +31,7 @@
             "web-dir": ".Build/Web"
         },
         "branch-alias": {
-            "dev-main": "2.x-dev"
+            "dev-main": "3.x-dev"
         }
     },
     "require": {
