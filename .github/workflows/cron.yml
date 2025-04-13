@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        releaseBranch: [ "main", "1" ]
+        releaseBranch: [ "main", "2", "1" ]
     steps:
       - name: "Checkout '${{ matrix.releaseBranch }}'"
         uses: actions/checkout@v4
