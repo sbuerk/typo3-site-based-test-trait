@@ -107,18 +107,22 @@ trait SiteBasedTestTrait
     }
 
     /**
+     * @param non-empty-string $base
+     * @param non-empty-string $websiteTitle
      * @param array<non-empty-string, mixed> $additionalRootConfiguration
      * @return array<non-empty-string, mixed>
      */
     protected function buildSiteConfiguration(
         int $rootPageId,
-        string $base = '',
+        string $base = '/',
+        string $websiteTitle = 'Home',
         array $additionalRootConfiguration = [],
     ): array {
         return array_merge(
             [
                 'rootPageId' => $rootPageId,
                 'base' => $base,
+                'websiteTitle' => $websiteTitle,
             ],
             $additionalRootConfiguration,
         );
