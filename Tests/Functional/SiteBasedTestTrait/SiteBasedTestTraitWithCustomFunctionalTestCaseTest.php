@@ -26,8 +26,8 @@ final class SiteBasedTestTraitWithCustomFunctionalTestCaseTest extends Functiona
     use SiteBasedTestTrait;
 
     protected const LANGUAGE_PRESETS = [
-        'EN' => ['id' => 0, 'title' => 'English', 'locale' => 'en_US.UTF8'],
-        'FR' => ['id' => 1, 'title' => 'French', 'locale' => 'fr_FR.UTF8'],
+        'EN' => ['id' => 0, 'title' => 'English', 'locale' => 'en_US.UTF8', 'custom' => ['customLanguageKey' => 'EN123']],
+        'FR' => ['id' => 1, 'title' => 'French', 'locale' => 'fr_FR.UTF8', 'custom' => ['customLanguageKey' => 'FR123']],
     ];
 
     #[Test]
@@ -38,6 +38,7 @@ final class SiteBasedTestTraitWithCustomFunctionalTestCaseTest extends Functiona
             $this->buildSiteConfiguration(
                 rootPageId: 1,
                 base: 'https://acme.com/',
+                websiteTitle: 'ACME Start Page'
             ),
             [
                 $this->buildDefaultLanguageConfiguration(
