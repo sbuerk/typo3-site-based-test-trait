@@ -124,12 +124,30 @@ level to the `SiteConfiguation` similar to [writeSiteConfiguration() argument ad
 $this->buildSiteConfiguration(
     rootPageId: 1,
     base: 'https://acme.com/',
+    websiteTitle: 'Home',
     additionalRootConfiguration: [
       'settings' => [
         'some_settings' => 123,
       ],    
     ],
 );
+```
+
+Method signature:
+
+```php
+/**
+ * @param non-empty-string $base
+ * @param non-empty-string $websiteTitle
+ * @param array<non-empty-string, mixed> $additionalRootConfiguration
+ * @return array<non-empty-string, mixed>
+ */
+protected function buildSiteConfiguration(
+    int $rootPageId,
+    string $base = '/',
+    string $websiteTitle = 'Home',
+    array $additionalRootConfiguration = [],
+): array {}
 ```
 
 ### `LANGUAGE_PRESETS` class property
