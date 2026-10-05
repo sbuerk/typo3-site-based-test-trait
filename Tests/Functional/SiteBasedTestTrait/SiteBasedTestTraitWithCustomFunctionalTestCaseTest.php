@@ -20,6 +20,7 @@ namespace SBUERK\TYPO3\Testing\Tests\Functional\SiteBasedTestTrait;
 use PHPUnit\Framework\Attributes\Test;
 use SBUERK\TYPO3\Testing\SiteHandling\SiteBasedTestTrait;
 use SBUERK\TYPO3\Testing\TestCase\FunctionalTestCase;
+use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 
 final class SiteBasedTestTraitWithCustomFunctionalTestCaseTest extends FunctionalTestCase
 {
@@ -53,5 +54,30 @@ final class SiteBasedTestTraitWithCustomFunctionalTestCaseTest extends Functiona
                 ),
             ],
         );
+    }
+
+    #[Test]
+    public function additionalSiteConfigurationIsWritten(): void
+    {
+        $this->writeSiteConfiguration(
+            'acme',
+            $this->buildSiteConfiguration(
+                rootPageId: 1,
+                base: 'https://acme.com/',
+            ),
+            [
+                $this->buildDefaultLanguageConfiguration(
+                    identifier: 'EN',
+                    base: 'https://acme.com/',
+                ),
+            ],
+            additional: [
+                'dependencies' => ['my-vendor/my-set'],
+            ],
+        );
+
+        $configuration = $this->get(SiteConfiguration::class)->load('acme');
+
+        $this->assertSame(['my-vendor/my-set'], $configuration['dependencies'] ?? null);
     }
 }
