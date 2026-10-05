@@ -75,7 +75,7 @@ trait SiteBasedTestTrait
             $configuration['errorHandling'] = $errorHandling;
         }
         if ($additional !== []) {
-            ArrayUtility::mergeRecursiveWithOverrule($configuration, $site);
+            ArrayUtility::mergeRecursiveWithOverrule($configuration, $additional);
         }
         $siteWriter = $this->get(SiteWriter::class);
         try {
